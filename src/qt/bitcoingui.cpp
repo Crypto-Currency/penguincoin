@@ -28,6 +28,7 @@
 #include "notificator.h"
 #include "guiutil.h"
 #include "rpcconsole.h"
+#include "version.h"
 
 #ifdef Q_WS_MAC
 #include "macdockiconhandler.h"
@@ -71,7 +72,7 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
     rpcConsole(0)
 {
     resize(850, 550);
-    setWindowTitle(tr("PenguinCoin") + " - " + tr("Wallet"));
+    setWindowTitle(tr("PenguiCoin - Wallet  ")+QString::fromStdString(CLIENT_BUILD));
 #ifndef Q_WS_MAC
     qApp->setWindowIcon(QIcon(":icons/bitcoin"));
     setWindowIcon(QIcon(":icons/bitcoin"));
@@ -87,6 +88,7 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
 
     // Create application menu bar
     createMenuBar();
+menuBar()->setNativeMenuBar(false);// menubar on form instead
 
     // Create the toolbars
     createToolBars();
@@ -314,20 +316,26 @@ void BitcoinGUI::createMenuBar()
 
     // Configure the menus
     QMenu *file = appMenuBar->addMenu(tr("&File"));
-    file->addAction(backupWalletAction);
     file->addAction(exportAction);
-#ifndef FIRST_CLASS_MESSAGING
-    file->addAction(signMessageAction);
-    file->addAction(verifyMessageAction);
-#endif
     file->addSeparator();
     file->addAction(quitAction);
 
     QMenu *settings = appMenuBar->addMenu(tr("&Settings"));
-    settings->addAction(encryptWalletAction);
-    settings->addAction(changePassphraseAction);
-    settings->addSeparator();
     settings->addAction(optionsAction);
+
+    QMenu *wallet = appMenuBar->addMenu(tr("&Wallet"));
+    wallet->addAction(backupWalletAction);
+    wallet->addSeparator();
+    wallet->addAction(encryptWalletAction);
+    wallet->addAction(changePassphraseAction);
+//    wallet->addAction(unlockWalletStakeAction);
+//    wallet->addSeparator();
+//    wallet->addAction(checkWalletAction);
+//    wallet->addAction(repairWalletAction);
+//    wallet->addAction(zapWalletAction);
+    wallet->addSeparator();
+    wallet->addAction(signMessageAction);
+    wallet->addAction(verifyMessageAction);
 
     QMenu *help = appMenuBar->addMenu(tr("&Help"));
     help->addAction(openRPCConsoleAction);
