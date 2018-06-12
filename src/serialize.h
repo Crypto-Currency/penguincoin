@@ -808,6 +808,7 @@ public:
     iterator insert(iterator it, const char& x=char()) { return vch.insert(it, x); }
     void insert(iterator it, size_type n, const char& x) { vch.insert(it, n, x); }
 
+/*
     void insert(iterator it, const_iterator first, const_iterator last)
     {
         assert(last - first >= 0);
@@ -820,8 +821,8 @@ public:
         else
             vch.insert(it, first, last);
     }
+*/
 
-/*
     void insert(iterator it, std::vector<char>::const_iterator first, std::vector<char>::const_iterator last)
     {
         assert(last - first >= 0);
@@ -834,7 +835,7 @@ public:
         else
             vch.insert(it, first, last);
     }
-*/
+
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1300
     void insert(iterator it, const char* first, const char* last)
