@@ -260,15 +260,11 @@ void SkinsPage::loadSettings()
  
 void SkinsPage::loadSkin()
 {
- std::string tmppath = GetDataDir().string();
-
-//qDebug() << "tmppathDebug=" << tmppath.c_str();
-//qDebug() << "inipath=" << inipath;
   QFile styleFile(inipath+"/"+inifname);
   styleFile.open(QFile::ReadOnly);
   QByteArray bytes = styleFile.readAll();
   QString newStyleSheet(bytes);
-newStyleSheet.replace("myimages",inipath+"/images"); // deal with relative path
+  newStyleSheet.replace("myimages",inipath+"/images"); // deal with relative path
   QApplication *app = (QApplication*)QApplication::instance();
   app->setStyleSheet(NULL);
   app->setStyleSheet(newStyleSheet);
@@ -297,7 +293,6 @@ void SkinsPage::getlist()
 
   connect(&manager,SIGNAL(finished(QNetworkReply*)),this,SLOT(getListFinished(QNetworkReply*)));
 
-qDebug() << "requesting list ...";
   QNetworkRequest request;
   request.setUrl(QUrl("http://penguincoin.co/themes/list.txt"));
   request.setRawHeader("User-Agent", "PENG Wallet theme request");
@@ -371,7 +366,6 @@ void SkinsPage::downloadFinished(QNetworkReply *reply)
   {
     QString filename = inipath + url.path().replace("/themes/","/");
 
-qDebug() << "filename=" << filename;
     if (!saveToDisk(filename, reply))
     {
       QString fError = tr("Could not open ") + filename + " for writing: " + latestFileError;
