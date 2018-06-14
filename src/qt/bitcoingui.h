@@ -3,14 +3,19 @@
 
 #include <QMainWindow>
 #include <QSystemTrayIcon>
+#include <QDialog>
+#include <QLabel>
+
+#include "util.h" // for uint64
 
 class TransactionTableModel;
 class ClientModel;
 class WalletModel;
 class TransactionView;
 class OverviewPage;
-class MiningPage;
+//class MiningPage;
 class AddressBookPage;
+class SkinsPage;
 class SendCoinsDialog;
 class SignVerifyMessageDialog;
 class Notificator;
@@ -25,6 +30,7 @@ class QModelIndex;
 class QProgressBar;
 class QStackedWidget;
 class QUrl;
+class QDialog;
 QT_END_NAMESPACE
 
 /**
@@ -61,15 +67,16 @@ private:
     QStackedWidget *centralWidget;
 
     OverviewPage *overviewPage;
-    MiningPage *miningPage;
+//    MiningPage *miningPage;
     QWidget *transactionsPage;
+	SkinsPage *skinsPage;
     AddressBookPage *addressBookPage;
     AddressBookPage *receiveCoinsPage;
     SendCoinsDialog *sendCoinsPage;
     SignVerifyMessageDialog *signVerifyMessageDialog;
 
     QLabel *labelEncryptionIcon;
-    QLabel *labelMiningIcon;
+//    QLabel *labelMiningIcon;
     QLabel *labelConnectionsIcon;
     QLabel *labelBlocksIcon;
     QLabel *progressBarLabel;
@@ -77,11 +84,12 @@ private:
 
     QMenuBar *appMenuBar;
     QAction *overviewAction;
-    QAction *miningAction;
+//    QAction *miningAction;
     QAction *historyAction;
     QAction *quitAction;
     QAction *sendCoinsAction;
     QAction *addressBookAction;
+	QAction *skinsPageAction;
     QAction *signMessageAction;
     QAction *verifyMessageAction;
     QAction *firstClassMessagingAction;
@@ -117,8 +125,8 @@ public slots:
     void setNumConnections(int count);
     /** Set number of blocks shown in the UI */
     void setNumBlocks(int count, int countOfPeers);
-    /** Set mining status and hashrate in the UI */
-    void setMining(bool mining, int hashrate);
+//    /** Set mining status and hashrate in the UI */
+//    void setMining(bool mining, int hashrate);
     /** Set the encryption status as shown in the UI.
        @param[in] status            current encryption status
        @see WalletModel::EncryptionStatus
@@ -127,6 +135,10 @@ public slots:
 
     /** Notify the user of an error in the network or transaction handling code. */
     void error(const QString &title, const QString &message, bool modal);
+    void information(const QString &title, const QString &message);
+    void status(const QString &message);
+
+
     /** Asks the user whether to pay the transaction fee or to cancel the transaction.
        It is currently not possible to pass a return value to another thread through
        BlockingQueuedConnection, so an indirected pointer is used.
@@ -141,12 +153,14 @@ public slots:
 private slots:
     /** Switch to overview (home) page */
     void gotoOverviewPage();
-    /** Switch to mining page */
-    void gotoMiningPage();
+//    /** Switch to mining page */
+//    void gotoMiningPage();
     /** Switch to history (transactions) page */
     void gotoHistoryPage();
     /** Switch to address book page */
     void gotoAddressBookPage();
+    /** Switch to skins page */
+    void gotoSkinsPage();
     /** Switch to receive coins page */
     void gotoReceiveCoinsPage();
     /** Switch to send coins page */

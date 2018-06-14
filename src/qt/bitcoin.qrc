@@ -43,12 +43,13 @@
         <file alias="filesave">res/icons/filesave.png</file>
         <file alias="qrcode">res/icons/qrcode.png</file>
         <file alias="debugwindow">res/icons/debugwindow.png</file>
+        <file alias="gears">res/icons/gear.png</file>
     </qresource>
     <qresource prefix="/images">
         <file alias="about">res/images/about.png</file>
-        <file alias="splash">res/images/splash2.png</file>
-        <file alias="splash2">res/images/splash2.png</file>
-		<file alias="splash22">res/images/splash2.png</file>
+        <file alias="splash">res/images/splash.png</file>
+        <file alias="backg">res/images/wallet.png</file>
+        <file alias="penguin">res/images/penguin.png</file>
     </qresource>
     <qresource prefix="/movies">
         <file alias="update_spinner">res/movies/update_spinner.mng</file>
