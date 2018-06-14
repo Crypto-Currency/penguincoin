@@ -723,6 +723,20 @@ bool AppInit2()
         }
     }
 
+    filesystem::path pathBootstrap = GetDataDir() / "bootstrap.dat";
+    if (filesystem::exists(pathBootstrap))
+    {
+        FILE *file = fopen(pathBootstrap.string().c_str(), "rb");
+        if (file)
+        {
+            uiInterface.InitMessage(_("Loading Bootstrap..."));
+            printf("Loading Bootstrap...\n");
+            filesystem::path pathBootstrapOld = GetDataDir() / "bootstrap.dat.old";
+            LoadExternalBlockFile(file);
+            RenameOver(pathBootstrap, pathBootstrapOld);
+        }
+    }
+
     // ********************************************************* Step 9: load peers
 
     uiInterface.InitMessage(_("Loading addresses..."));

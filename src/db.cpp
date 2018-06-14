@@ -6,6 +6,7 @@
 
 #include "db.h"
 #include "util.h"
+#include "ui_interface.h"
 #include "main.h"
 #include <boost/version.hpp>
 #include <boost/filesystem.hpp>
@@ -484,6 +485,11 @@ bool CTxDB::LoadBlockIndex()
     if (fRequestShutdown)
         return true;
 
+    unsigned int tempcount=0;
+    unsigned int steptemp=0;
+    string tempmess;
+    string mess = "Calculating best chain...";
+    uiInterface.InitMessage(_(mess.c_str()));
     // Calculate bnChainWork
     vector<pair<int, CBlockIndex*> > vSortedByHeight;
     vSortedByHeight.reserve(mapBlockIndex.size());
@@ -491,12 +497,27 @@ bool CTxDB::LoadBlockIndex()
     {
         CBlockIndex* pindex = item.second;
         vSortedByHeight.push_back(make_pair(pindex->nHeight, pindex));
+      tempcount++;
+      if(tempcount>=10000)
+      {
+        tempmess = "Loading pairs / "+ boost::to_string(pindex);
+        uiInterface.InitMessage(_(tempmess.c_str()));
+        tempcount=0;
+      }
     }
     sort(vSortedByHeight.begin(), vSortedByHeight.end());
     BOOST_FOREACH(const PAIRTYPE(int, CBlockIndex*)& item, vSortedByHeight)
     {
         CBlockIndex* pindex = item.second;
         pindex->bnChainWork = (pindex->pprev ? pindex->pprev->bnChainWork : 0) + pindex->GetBlockWork();
+      tempcount++;
+      if(tempcount>=30000)
+      {
+//        steptemp ++;
+        tempmess = "Calculating stake modifiers / "+ boost::to_string(pindex);
+        uiInterface.InitMessage(_(tempmess.c_str()));
+        tempcount=0;
+      }
     }
 
     // Load hashBestChain pointer to end of best chain
@@ -530,6 +551,14 @@ bool CTxDB::LoadBlockIndex()
     map<pair<unsigned int, unsigned int>, CBlockIndex*> mapBlockPos;
     for (CBlockIndex* pindex = pindexBest; pindex && pindex->pprev; pindex = pindex->pprev)
     {
+      tempcount++;
+      if(tempcount>=100)
+      {
+        steptemp ++;
+        tempmess=mess+" / "+ boost::to_string(pindex);
+        uiInterface.InitMessage(_(tempmess.c_str()));
+        tempcount=0;
+      }
         if (fRequestShutdown || pindex->nHeight < nBestHeight-nCheckDepth)
             break;
         CBlock block;
