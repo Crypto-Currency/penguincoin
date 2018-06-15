@@ -686,6 +686,10 @@ bool CWalletTx::WriteToDisk()
 int CWallet::ScanForWalletTransactions(CBlockIndex* pindexStart, bool fUpdate)
 {
     int ret = 0;
+    unsigned int tempcount=0;
+    string tempmess;
+    string mess = "Scanning for txs...";
+    uiInterface.InitMessage(_(mess.c_str()));
 
     CBlockIndex* pindex = pindexStart;
     {
@@ -700,6 +704,13 @@ int CWallet::ScanForWalletTransactions(CBlockIndex* pindexStart, bool fUpdate)
                     ret++;
             }
             pindex = pindex->pnext;
+      tempcount++;
+      if(tempcount>=1000)
+      {
+        tempmess = "index / "+ boost::to_string(pindex);
+        uiInterface.InitMessage(_(tempmess.c_str()));
+        tempcount=0;
+      }
         }
     }
     return ret;

@@ -2209,6 +2209,10 @@ bool LoadExternalBlockFile(FILE* fileIn)
     {
         LOCK(cs_main);
         try {
+			char msg[256];
+			double progress = 0;
+			double oldProgress = -1;
+			double fSize = GetFilesize(fileIn);
             CAutoFile blkdat(fileIn, SER_DISK, CLIENT_VERSION);
             unsigned int nPos = 0;
             while (nPos != (unsigned int)-1 && blkdat.good() && !fRequestShutdown)
@@ -2248,6 +2252,16 @@ bool LoadExternalBlockFile(FILE* fileIn)
                     {
                         nLoaded++;
                         nPos += 4 + nSize;
+						progress = ((double)nPos * 1000.0) / fSize;
+						if (progress != oldProgress)
+						{
+							double dispProgress = progress / 10;
+							sprintf(msg, "Importing bootstrap (%.1f%%)...", dispProgress);
+#ifdef QT_GUI
+							uiInterface.InitMessage(_(msg));
+#endif
+							oldProgress = progress;
+						}
                     }
                 }
             }
