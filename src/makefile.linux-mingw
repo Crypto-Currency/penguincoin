@@ -5,23 +5,27 @@
 DEPSDIR:=/usr/i586-mingw32msvc
 
 USE_UPNP:=0
+USE_IPV6:=1
 
 INCLUDEPATHS= \
- -I"$(DEPSDIR)/boost_1_53_0" \
- -I"$(DEPSDIR)/db-4.8.30.NC/build_unix" \
- -I"$(DEPSDIR)/openssl-1.0.1e/include" \
+ -I"$(CURDIR)" \
  -I"$(CURDIR)"/obj \
+ -I"$(DEPSDIR)/boost_1_49_0" \
+ -I"$(DEPSDIR)/db-4.8.30.NC/build_unix" \
+ -I"$(DEPSDIR)/openssl-1.0.1g/include" \
+ -I"$(DEPSDIR)"
 
 LIBPATHS= \
- -L"$(DEPSDIR)/boost_1_53_0/stage/lib" \
+ -L"$(DEPSDIR)/boost_1_49_0/stage/lib" \
  -L"$(DEPSDIR)/db-4.8.30.NC/build_unix" \
- -L"$(DEPSDIR)/openssl-1.0.1e"
+ -L"$(DEPSDIR)/openssl-1.0.1g"
 
 LIBS= \
  -l boost_system-mt-s \
  -l boost_filesystem-mt-s \
  -l boost_program_options-mt-s \
  -l boost_thread_win32-mt-s \
+ -l boost_chrono-mt-s \
  -l db_cxx \
  -l ssl \
  -l crypto
@@ -68,7 +72,7 @@ OBJS= \
     obj/walletdb.o \
     obj/noui.o
 
-all: PenguinCoind.exe
+all: penguinpoind.exe
 
 obj/scrypt.o: scrypt.c
 	i586-mingw32msvc-gcc -c $(CFLAGS) -o $@ $^
@@ -81,7 +85,7 @@ DEFS += -DHAVE_BUILD_INFO
 obj/%.o: %.cpp $(HEADERS)
 	i586-mingw32msvc-g++ -c $(CFLAGS) -o $@ $<
 
-PenguinCoind.exe: $(OBJS:obj/%=obj/%)
+penguincoind.exe: $(OBJS:obj/%=obj/%)
 	i586-mingw32msvc-g++ $(CFLAGS) -o $@ $(LIBPATHS) $^ $(LIBS)
 
 TESTOBJS := $(patsubst test/%.cpp,obj-test/%.o,$(wildcard test/*.cpp))
@@ -89,15 +93,15 @@ TESTOBJS := $(patsubst test/%.cpp,obj-test/%.o,$(wildcard test/*.cpp))
 obj-test/%.o: test/%.cpp $(HEADERS)
 	i586-mingw32msvc-g++ -c $(TESTDEFS) $(CFLAGS) -o $@ $<
 
-test_PenguinCoin.exe: $(TESTOBJS) $(filter-out obj/init.o,$(OBJS:obj/%=obj/%))
+test_penguincoin.exe: $(TESTOBJS) $(filter-out obj/init.o,$(OBJS:obj/%=obj/%))
 	i586-mingw32msvc-g++ $(CFLAGS) -o $@ $(LIBPATHS) $^ -lboost_unit_test_framework $(LIBS)
 
 
 clean:
 	-rm -f obj/*.o
-	-rm -f PenguinCoind.exe
+	-rm -f penguincoind.exe
 	-rm -f obj-test/*.o
-	-rm -f test_PenguinCoin.exe
+	-rm -f test_penguincoin.exe
 	-rm -f src/build.h
 
 FORCE:
